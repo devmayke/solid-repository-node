@@ -1,6 +1,6 @@
 import { router } from './routes/router'
 import  express  from 'express'
-import { UserDB } from './database/UserDB'
+import { db } from './database/UserDB'
 import {v4} from 'uuid'
 
 
@@ -27,7 +27,7 @@ export class App{
   }
 
   private database():void{   
-    UserDB.connect()
+    db.connect()
   }
 
   public listen(port:number, cb?:()=>void):void{

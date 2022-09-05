@@ -16,10 +16,10 @@ exports.db = exports.UserDB = void 0;
 const mysql2_1 = __importDefault(require("mysql2"));
 const uuid_1 = require("uuid");
 class UserDB {
-    static getDB() {
+    getDB() {
         return UserDB.db;
     }
-    static connect() {
+    connect() {
         UserDB.db = mysql2_1.default.createConnection({
             host: process.env.MYSQL_HOST,
             user: process.env.MYSQL_USER,
@@ -27,7 +27,7 @@ class UserDB {
             database: "teste",
             port: 3307,
         });
-        UserDB.db.connect((error) => {
+        this.getDB().connect((error) => {
             if (error) {
                 console.log(error);
             }
@@ -38,7 +38,7 @@ class UserDB {
     }
     findById(id) {
         return new Promise((resolve, rejects) => {
-            UserDB.db.query(`select * from person where id="${id}"`, (error, results) => {
+            this.getDB().query(`select * from person where id="${id}"`, (error, results) => {
                 if (error) {
                     rejects(error);
                 }
@@ -54,7 +54,7 @@ class UserDB {
                 let columns = Object.keys(props).slice(1, 4).toString();
                 let data = Object.values(props).slice(1, 4).map(el => `"${el}"`);
                 let id = (0, uuid_1.v4)();
-                UserDB.db.query(`insert into person (id,${columns}) values ("${id}",${data})`, (error, results) => {
+                this.getDB().query(`insert into person (id,${columns}) values ("${id}",${data})`, (error, results) => {
                     if (error) {
                         console.log(error);
                         rejects(error);
@@ -69,7 +69,7 @@ class UserDB {
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, rejects) => {
-                UserDB.db.query("select * from person", (error, results) => {
+                this.getDB().query("select * from person", (error, results) => {
                     if (error)
                         rejects(error);
                     resolve(results);
@@ -79,4 +79,4 @@ class UserDB {
     }
 }
 exports.UserDB = UserDB;
-exports.db = UserDB.getDB();
+exports.db = new UserDB();

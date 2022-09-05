@@ -7,14 +7,14 @@ class Route {
     constructor() {
         this.router = (0, express_1.Router)();
         this.user = new UserController_1.UserController();
-        this.userRoutes();
+    }
+    getRouter() {
+        return this.router;
     }
     userRoutes() {
-        const router = (0, express_1.Router)();
-        const user = new UserController_1.UserController();
-        router.post("/", user.create);
-        router.get("/:id", user.findById);
-        router.get("/", user.findAll);
+        this.router.post("/", this.user.create);
+        this.router.get("/:id", this.user.findById);
+        this.router.get("/", this.user.findAll);
     }
 }
 exports.Route = Route;
